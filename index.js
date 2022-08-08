@@ -22,7 +22,8 @@ io.on("connection", async (socket) => {
         const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
         const messages = (await db.all("SELECT * FROM messages WHERE channelID = (?)", [channelID])).map(e => ({
             message: e.message,
-            userName: e.userName
+            userName: e.userName,
+            history: true
         }));
         socket.emit("message-response", messages);
         await db.close();
