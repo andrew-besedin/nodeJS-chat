@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
     <title>Document</title>
 </head>
 <body>
-    <table></table>
-    <select name="" id="">
+    <div class="chat-wrapper">
+        <div id="chat"></div>
+    </div>
+    <!-- <select name="" id="">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
-    </select>
-    <input class = "user-name-input" type="text">
-    <input class = "message-input" type="text">
-    <button>Отправить</button>
+    </select> -->
+    <div class="input-wrapper">
+        <div>
+            <input class = "user-name-input" type="text" placeholder="ник">
+            <input class = "message-input" type="text" placeholder="сообщение">
+        </div>
+        <button class="send-button">Отправить</button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
     <script src="./index.js"></script>
 </body>
