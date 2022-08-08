@@ -1,13 +1,16 @@
 const socket = io();
-
-const userNameInput = document.querySelector(".user-name-input");
-const messageInput = document.querySelector(".message-input");
 const select = document.querySelector("select");
 let previousChannel = 1;
 
 socket.emit('get-history', select.options[ select.selectedIndex ].value);
+if (localStorage.getItem('name')) document.querySelector(".user-name-input").value = localStorage.getItem('name');
 
 document.querySelector("button").addEventListener("click", () => {
+    const userNameInput = document.querySelector(".user-name-input");
+    const messageInput = document.querySelector(".message-input");
+    if (!messageInput.value || !userNameInput.value) return;
+    localStorage.setItem('name', userNameInput.value);
+
     socket.emit("message-send", { 
         message: messageInput.value, 
         userName: userNameInput.value
@@ -23,13 +26,9 @@ select.addEventListener("change", () => {
 
 socket.on("message-response", (response) => {
     for (const data of response) {
-        let tableRow = document.createElement("tr");
-        let tableData = document.createElement("td");
-        tableData.innerText = data.userName;
-        tableRow.appendChild(tableData);
-        tableData = document.createElement("td");
-        tableData.innerText = data.message;
-        tableRow.appendChild(tableData);
-        document.querySelector("table").appendChild(tableRow);
+        const newMessage = document.createElement('div');
+        newMessage.innerHTML = `<h2>${data.userName}</h2> <p>${data.message}</p>`;
+        document.querySelector('#chat').appendChild(newMessage);
     }
+    document.querySelector('#chat').scrollTop = document.querySelector('#chat').scrollHeight;
 });
