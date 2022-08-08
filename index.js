@@ -14,25 +14,23 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", async (socket) => {
-    socket.emit("clear");
-    const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
-    (await db.all("SELECT * FROM messages"))?.forEach((element) => {
-        socket.emit("message-response", {
-            message: element.message,
-            userName: element.userName
-        });
+    socket.on("get-history", async (data) => {
+        const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
+        const messages = (await db.all("SELECT * FROM messages")).map(e => ({
+            message: e.message,
+            userName: e.userName
+        }));
+        socket.emit("message-response", messages);
+        await db.close();
     });
-    await db.close();
-
     socket.on("message-send", async (data) => {
         const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
         await db.run(`INSERT INTO messages (userName, message) VALUES (?, ?)`, [data.userName, data.message]);
-        console.log(data.userName);
         await db.close();
-        io.emit("message-response", {
+        io.emit("message-response", [{
             message: data.message,
             userName: data.userName
-        });
+        }]);
     });
 });
 
