@@ -20,3 +20,7 @@ socket.on("message-response", (data) => {
     tableRow.appendChild(tableData);
     document.querySelector("table").appendChild(tableRow);
 });
+
+socket.on("clear", () => {
+    document.querySelector("table").innerHTML = null;
+});
