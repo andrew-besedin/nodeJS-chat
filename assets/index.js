@@ -26,7 +26,13 @@ select.addEventListener("change", () => {
     socket.emit('get-history', select.options[ select.selectedIndex ].value);
 });
 
+
 socket.on("message-response", (response) => {
+    if (response.length === 1) {
+        const audio = new Audio('./alert.wav');
+        audio.volume = 0.5;
+        audio.play();
+    }
     for (const data of response) {
         const newMessage = document.createElement('div');
         newMessage.innerHTML = `<h2>${data.userName}</h2> <p>${data.message}</p>`;
