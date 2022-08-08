@@ -28,7 +28,7 @@ select.addEventListener("change", () => {
 
 
 socket.on("message-response", (response) => {
-    if (response.length === 1) {
+    if (!response[0].history) {
         const audio = new Audio('./alert.wav');
         audio.volume = 0.5;
         audio.play();
