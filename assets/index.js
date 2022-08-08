@@ -1,7 +1,7 @@
 const socket = io();
 const select = document.querySelector("select");
 
-socket.emit("change-channel", { newChannel: 1 })
+socket.emit("change-channel", { newChannel: "1" });
 
 socket.emit('get-history', select.options[ select.selectedIndex ].value);
 if (localStorage.getItem('name')) document.querySelector(".user-name-input").value = localStorage.getItem('name');

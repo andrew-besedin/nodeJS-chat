@@ -16,7 +16,6 @@ app.get("/", (req, res) => {
 io.on("connection", async (socket) => {
     socket.on("change-channel", (data) => {
         [...socket.rooms].forEach(e => socket.leave(e))
-        console.log(data.newChannel);
         socket.join(data.newChannel);
     });
     socket.on("get-history", async (channelID) => {
@@ -30,7 +29,6 @@ io.on("connection", async (socket) => {
     });
     socket.on("message-send", async (data) => {
         const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
-        console.log([...socket.rooms]);
         await db.run(`INSERT INTO messages (userName, message, channelID) VALUES (?, ?, ?)`, [data.userName, data.message, [...socket.rooms][0]]);
         await db.close();
         io.to([...socket.rooms][0]).emit("message-response", [{
