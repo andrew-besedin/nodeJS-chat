@@ -1,6 +1,7 @@
 const socket = io();
 const select = document.querySelector("select");
-let previousChannel = 1;
+
+socket.emit("change-channel", { newChannel: 1 })
 
 socket.emit('get-history', select.options[ select.selectedIndex ].value);
 if (localStorage.getItem('name')) document.querySelector(".user-name-input").value = localStorage.getItem('name');
@@ -18,10 +19,11 @@ document.querySelector("button").addEventListener("click", () => {
 });
 
 select.addEventListener("change", () => {
+    document.querySelector("#chat").innerHTML = null;
     socket.emit("change-channel", {
-        previousChannel: previousChannel,
-        currentChannel: select.options[ select.selectedIndex ].value
+        newChannel: select.options[ select.selectedIndex ].value
     });
+    socket.emit('get-history', select.options[ select.selectedIndex ].value);
 });
 
 socket.on("message-response", (response) => {
