@@ -1,14 +1,23 @@
 const socket = io();
 
-userNameInput = document.querySelector(".user-name-input");
-messageInput = document.querySelector(".message-input");
+const userNameInput = document.querySelector(".user-name-input");
+const messageInput = document.querySelector(".message-input");
+const select = document.querySelector("select");
+let previousChannel = 1;
 
-socket.emit('get-history');
+socket.emit('get-history', select.options[ select.selectedIndex ].value);
 
 document.querySelector("button").addEventListener("click", () => {
     socket.emit("message-send", { 
         message: messageInput.value, 
         userName: userNameInput.value
+    });
+});
+
+select.addEventListener("change", () => {
+    socket.emit("change-channel", {
+        previousChannel: previousChannel,
+        currentChannel: select.options[ select.selectedIndex ].value
     });
 });
 

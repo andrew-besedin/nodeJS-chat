@@ -14,9 +14,12 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", async (socket) => {
-    socket.on("get-history", async (data) => {
+    socket.on("change-channel", (previousChannel, currentChannel) => {
+        // if 
+    });
+    socket.on("get-history", async (channelID) => {
         const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
-        const messages = (await db.all("SELECT * FROM messages")).map(e => ({
+        const messages = (await db.all("SELECT * FROM messages WHERE channelID = (?)", [channelID])).map(e => ({
             message: e.message,
             userName: e.userName
         }));
