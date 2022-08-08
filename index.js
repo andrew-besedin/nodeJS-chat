@@ -14,7 +14,6 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", async (socket) => {
-    console.log(socket);
     const db = await open({filename: "./database/base.db", driver: sqlite3.Database});
     (await db.all("SELECT * FROM messages"))?.forEach((element) => {
         socket.emit("message-response", {

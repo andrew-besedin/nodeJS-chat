@@ -1,4 +1,4 @@
-const socket = io({ forceBase64: true });
+const socket = io();
 
 userNameInput = document.querySelector(".user-name-input");
 messageInput = document.querySelector(".message-input");
